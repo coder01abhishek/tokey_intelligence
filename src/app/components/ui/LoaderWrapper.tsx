@@ -2,145 +2,95 @@
 
 import { useState, useEffect } from 'react';
 import Loader from './Loader';
-import { getAssetUrl } from '../../config/assets';
-
-// Critical assets for immediate display - including the hero GIF
-const CRITICAL_ASSETS = [
-  '/videos/doll.gif',  // Hero GIF with transparent background
-  '/bg-inte.png',      // Background image
-  '/Gradient.png',     // Gradient overlay
-  '/fader.png'         // Fade effect
-];
-
-// Non-critical videos (lazy loaded)
-const LAZY_VIDEOS = [
-  '/videos/step3.mp4',
-  '/videos/AICharactor.mp4',
-  '/videos/Aiagent.mp4'
-];
+import { motion, AnimatePresence } from 'framer-motion';
 
 const LoaderWrapper = () => {
   const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(35); // Start at 35% immediately
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let loadedCount = 0;
-    const totalItems = CRITICAL_ASSETS.length + 2; // assets + fonts
-    let isLoadingComplete = false;
+    let isMounted = true;
+    
+    // Always show loader for minimum 2 seconds
+    const minimumTimer = setTimeout(() => {
+      if (isMounted) {
+        setLoading(false);
+      }
+    }, 2000);
 
-    // Progress increment: 5% per second from 35% to 95% (60% range over 12 seconds)
+    // Smooth progress animation from 0% to 100% over 2 seconds
     const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = Math.min(prev + 5, 95); // Increment by 5% each second, cap at 95%
-        return newProgress;
-      });
-    }, 1000); // Every 1 second
-
-    const updateProgress = () => {
-      loadedCount++;
-      
-      // Check if all assets are loaded
-      if (loadedCount >= totalItems) {
-        isLoadingComplete = true;
-        
-        // Immediately jump to 100% and show website - no delays!
-        clearInterval(progressInterval);
-        setProgress(100);
-        setTimeout(() => {
-          setLoading(false);
-        }, 100); // Minimal delay just for visual feedback
-      }
-    };
-
-    // Monitor if loading completes while progress is still climbing
-    const checkCompletion = () => {
-      if (isLoadingComplete) {
-        clearInterval(progressInterval);
-        setProgress(100);
-        setTimeout(() => {
-          setLoading(false);
-        }, 100);
-      }
-    };
-
-    // Check completion every 100ms to ensure immediate response
-    const completionChecker = setInterval(checkCompletion, 100);
-
-    const preloadCriticalAssets = async () => {
-      const promises = CRITICAL_ASSETS.map((src, index) => {
-        return new Promise<void>((resolve) => {
-          const img = document.createElement('img');
-          img.src = getAssetUrl(src);
-
-          img.onload = () => {
-            updateProgress();
-            resolve();
-          };
-
-          img.onerror = () => {
-            console.warn(`Failed to preload ${getAssetUrl(src)}`);
-            updateProgress();
-            resolve();
-          };
+      if (isMounted) {
+        setProgress(prev => {
+          const newProgress = prev + 2; // Increase by 2% every 40ms to reach 100% in 2000ms
+          return newProgress >= 100 ? 100 : newProgress;
         });
-      });
-
-      try {
-        await Promise.all(promises);
-      } catch (error) {
-        console.warn('Some critical assets failed to preload:', error);
       }
-    };
+    }, 40);
 
-    const preloadCriticalResources = async () => {
-      // Preload critical fonts individually for better progress tracking
-      const fonts = [
-        '16px Inter',
-        'bold 16px Inter'
+    // Preload critical resources in background
+    const preloadResources = async () => {
+      // Preload images
+      const images = [
+        '/videos/doll.gif',
+        '/bg-inte.png',
+        '/Gradient.png',
+        '/fader.png'
       ];
 
-      for (const font of fonts) {
-        try {
-          await document.fonts.load(font);
-          updateProgress();
-        } catch (error) {
-          console.warn(`Font loading failed for ${font}:`, error);
-          updateProgress();
-        }
-      }
+      await Promise.all(
+        images.map(src => {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })
+      );
+
+      // Preload fonts
+      await document.fonts.ready;
     };
 
-    const handleLoad = async () => {
-      // Wait for DOM to be ready
-      await new Promise(resolve => {
-        if (document.readyState === 'complete') {
-          resolve(void 0);
-        } else {
-          window.addEventListener('load', resolve, { once: true });
-        }
-      });
-
-      // Start preloading critical resources
-      await Promise.all([
-        preloadCriticalAssets(),
-        preloadCriticalResources()
-      ]);
-    };
-
-    handleLoad();
+    preloadResources();
 
     return () => {
+      isMounted = false;
+      clearTimeout(minimumTimer);
       clearInterval(progressInterval);
-      clearInterval(completionChecker);
-      window.removeEventListener('load', () => {});
     };
   }, []);
 
-  if (loading) {
-    return <Loader progress={progress} />;
-  }
+  const pageVariants = {
+    initial: { opacity: 0 },
+    in: { opacity: 1 },
+    out: { opacity: 0 }
+  };
 
-  return null;
+  const pageTransition = {
+    type: "tween" as const,
+    ease: "easeInOut" as const,
+    duration: 0.5
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      {loading && (
+        <motion.div
+          key="loader"
+          initial="initial"
+          animate="in"
+          exit="out"
+          variants={pageVariants}
+          transition={pageTransition}
+          className="fixed inset-0 z-50 bg-black flex items-center justify-center"
+        >
+          <Loader progress={progress} />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default LoaderWrapper;

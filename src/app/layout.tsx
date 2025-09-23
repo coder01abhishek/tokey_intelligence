@@ -43,11 +43,13 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased`}>
         <LoaderWrapper/>
-          <Header />
+        <Header />
+        <main className="min-h-screen">
           {children}
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
+        </main>
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
