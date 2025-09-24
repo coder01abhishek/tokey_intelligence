@@ -10,7 +10,7 @@ import ChangingWordHero from "./ChangingWordHero";
 
 const Hero: React.FC = () => {
     return (
-        <section className="relative flex flex-col items-center justify-center bg-[#111111] text-center sm:px-4 sm:pt-20 pt-8  min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]" id="home">
+        <section className="relative flex flex-col items-center justify-center bg-[#111111] text-center sm:px-4 sm:py-20 py-8  min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]" id="home">
             {/* Sparkles Background */}
             <div className="w-full absolute inset-0 bg-[#111111] h-full">
                 <SparklesCore
@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
             </p>
 
             {/* Buttons */}
-            <div className="sm:mt-14 mt-8 flex gap-4 flex-wrap justify-center">
+            <div className=" mt-8 flex gap-4 flex-wrap justify-center">
                 <Link
                     href="https://app.tokyoproject.ai"
                     className="sm:px-9 sm:py-3 z-20 px-6 py-2 rounded-full bg-[#0071E3] hover:bg-blue-700 text-white text-sm md:text-base transition flex items-center justify-center"
