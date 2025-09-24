@@ -4,6 +4,7 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { getAssetUrl } from '../config/assets';
+import Image from 'next/image';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -11,35 +12,70 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 const modules = [
-    {
+   {
         id: 1,
         title: 'English',
         subtitle: 'English prompts',
-        icon: (<img src={getAssetUrl("/assets/images/eng.png")} alt="eng" width="100" height="60" />),
+        icon: (
+            <Image
+                src={getAssetUrl("/assets/images/eng.png")}
+                alt="eng"
+                width={100}
+                height={60}
+            />
+        ),
     },
     {
         id: 2,
         title: '西班牙语提示',
         subtitle: '简体中文提示',
-        icon: (<img src={getAssetUrl("/assets/images/简体中文提示.png")} alt="Chinese Icon" width="100" height="60" />),
+        icon: (
+            <Image
+                src={getAssetUrl("/assets/images/简体中文提示.png")}
+                alt="Chinese Icon"
+                width={100}
+                height={60}
+            />
+        ),
     },
     {
         id: 3,
         title: 'Española',
         subtitle: 'indicaciones en español',
-        icon: (<img src={getAssetUrl("/assets/images/epanola.png")} alt="Spanish Icon" width="100" height="60" />),
+        icon: (
+            <Image
+                src={getAssetUrl("/assets/images/epanola.png")}
+                alt="Spanish Icon"
+                width={100}
+                height={60}
+            />
+        ),
     },
     {
         id: 4,
         title: 'Tiếng Việt',
         subtitle: 'Lời nhắc tiếng Việt',
-        icon: (<img src={getAssetUrl("/assets/images/tie.png")} alt="Vietnamese Icon" width="100" height="60" />),
+        icon: (
+            <Image
+                src={getAssetUrl("/assets/images/tie.png")}
+                alt="Vietnamese Icon"
+                width={100}
+                height={60}
+            />
+        ),
     },
     {
         id: 5,
         title: 'Русский',
         subtitle: 'Русские подсказки',
-        icon: (<img src={getAssetUrl("/assets/images/pycc.png")} alt="Russian Icon" width="100" height="60" />),
+        icon: (
+            <Image
+                src={getAssetUrl("/assets/images/pycc.png")}
+                alt="Russian Icon"
+                width={100}
+                height={60}
+            />
+        ),
     },
 ];
 
