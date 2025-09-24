@@ -26,11 +26,15 @@ const Hero: React.FC = () => {
 
             {/* Character GIF with transparent background for aesthetics */}
             <div className="relative w-full sm:max-w-md max-w-sm">
-                <img
-                    src={getAssetUrl("/videos/doll.gif")}
-                    alt="Animated Character"
+                <video
+                    src={getAssetUrl("/videos/doll.mp4")} // use the proper video file path
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
                     className="z-10 w-full object-contain"
                 />
+
 
                 {/* Mobile fade overlay */}
                 <div
