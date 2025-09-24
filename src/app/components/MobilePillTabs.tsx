@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
@@ -15,7 +16,7 @@ interface Pill {
 
 interface MobilePillTabsProps {
   pills: Pill[];
-  bottomTabs: string[]; // keep original type
+  bottomTabs: string[];
 }
 
 export default function MobilePillTabs({ pills, bottomTabs }: MobilePillTabsProps) {
@@ -39,13 +40,13 @@ export default function MobilePillTabs({ pills, bottomTabs }: MobilePillTabsProp
     return () => clearInterval(tabInterval);
   }, [bottomTabs.length]);
 
-  // Pin the section at center while animating
+  // ScrollTrigger pin (optional)
   useEffect(() => {
     if (sectionRef.current) {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=200%", // how long to pin
+        end: "+=200%",
         pin: false,
         anticipatePin: 1,
       });
@@ -56,31 +57,32 @@ export default function MobilePillTabs({ pills, bottomTabs }: MobilePillTabsProp
     <div
       ref={sectionRef}
       className="relative w-full h-fit flex flex-col items-center justify-center text-white overflow-hidden px-4 py-10 xl:hidden block"
-      
     >
-      <Image src={getAssetUrl("/bg-inte.png")} alt="Tokyo Intelligence GIF" fill className='w-full object-cover absolute bottom-0 left-0 z-20' />
-      {/* <h2 className="text-center text-white mb-32">Tokyo Intelligence</h2> */}
-      <h2 className="text-center text-white mb-32">
-        <span className="relative inline-block  text-white">
-          {/* White text (front layer) */}
-          <span className="relative z-10">
-            Tokyo Intelligence
-          </span>
+      {/* Background */}
+      <Image
+        src={getAssetUrl("/bg-inte.png")}
+        alt="Tokyo Intelligence Background"
+        fill
+        className="w-full object-cover absolute bottom-0 left-0 z-20"
+      />
 
-          {/* Gradient shadow behind */}
+      {/* Title */}
+      <h2 className="text-center text-white mb-32">
+        <span className="relative inline-block text-white">
+          <span className="relative z-10">Tokyo Intelligence</span>
           <span
             aria-hidden="true"
             className="absolute inset-0 -z-10 blur-[10px] opacity-100
-               bg-[linear-gradient(108deg,#0894FF,#C959DD_34%,#FF2E54_68%,#FF9004)]
-               bg-clip-text text-transparent"
+                       bg-[linear-gradient(108deg,#0894FF,#C959DD_34%,#FF2E54_68%,#FF9004)]
+                       bg-clip-text text-transparent"
           >
             Tokyo Intelligence
           </span>
         </span>
-
       </h2>
+
       {/* Pills Section */}
-      <div className="relative flex justify-center items-center px-4 ">
+      <div className="relative flex justify-center items-center px-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={activePillIndex}
@@ -92,17 +94,28 @@ export default function MobilePillTabs({ pills, bottomTabs }: MobilePillTabsProp
           >
             <div className="px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center gap-2 shadow-lg">
               <span className="w-[42px] h-[42px] flex items-center justify-center bg-[#2388FF] rounded-full flex-shrink-0">
-                <img src={pills[activePillIndex].gif} alt="icon" className="w-6 h-6 " />
+                <img
+                  src={pills[activePillIndex].gif}
+                  alt={pills[activePillIndex].label}
+                  className="w-6 h-6 float-bounce"
+                />
               </span>
               <span className="font-medium">{pills[activePillIndex].label}</span>
             </div>
           </motion.div>
         </AnimatePresence>
 
-        {/* Doll Image */}
-        <div className="relative w-full h-full w-full sm:max-w-[350px] md:max-w-[400px] lg:max-w-[495px] mx-auto ">
-          {/* <img src="/videos/doll.gif" alt="doll" className='doll w-full' /> */}
-          <video src={getAssetUrl("/videos/Aiagent.mp4")} autoPlay loop muted playsInline controls={false} className='doll'></video>
+        {/* Doll Video */}
+        <div className="relative w-full sm:max-w-[350px] md:max-w-[400px] lg:max-w-[495px] mx-auto">
+          <video
+            src={getAssetUrl("/videos/Aiagent.mp4")}
+            autoPlay
+            loop
+            muted
+            playsInline
+            controls={false}
+            className="doll w-full"
+          ></video>
         </div>
       </div>
 
@@ -119,8 +132,8 @@ export default function MobilePillTabs({ pills, bottomTabs }: MobilePillTabsProp
           >
             <button
               className="
-              absolute
-              -bottom-0
+                absolute
+                -bottom-0
                 px-4 py-3
                 bg-white/10 text-white
                 rounded-full

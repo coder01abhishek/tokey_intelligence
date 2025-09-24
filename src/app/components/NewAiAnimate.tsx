@@ -40,15 +40,15 @@ const NewAiAnimate = () => {
     const bottomTabsRef = useRef<HTMLDivElement>(null);
 
     const leftPills: PillData[] = [
-        { label: 'Models', gif: '/assets/gifs/models.gif', top: 'top-[20%]', mdTop: 'md:top-[50%]', left: 'left-0', mdLeft: 'md:left-[20%]' },
-        { label: 'Scene', gif: '/assets/gifs/scene.gif', top: 'top-[45%]', mdTop: 'md:top-[35%]', left: 'left-0', mdLeft: 'md:left-[25%]' },
-        { label: 'Modules', gif: '/assets/gifs/modules.gif', top: 'top-[70%]', mdTop: 'md:top-[20%]', left: 'left-0', mdLeft: 'md:left-[30%]' },
+        { label: 'Models', gif: '/assets/gifs/models.svg', top: 'top-[20%]', mdTop: 'md:top-[50%]', left: 'left-0', mdLeft: 'md:left-[20%]' },
+        { label: 'Scene', gif: '/assets/gifs/scene.svg', top: 'top-[45%]', mdTop: 'md:top-[35%]', left: 'left-0', mdLeft: 'md:left-[25%]' },
+        { label: 'Modules', gif: '/assets/gifs/modules.svg', top: 'top-[70%]', mdTop: 'md:top-[20%]', left: 'left-0', mdLeft: 'md:left-[30%]' },
     ];
 
     const rightPills: PillData[] = [
-        { label: 'Memory', gif: '/assets/gifs/memory.gif', top: 'top-[20%]', mdTop: 'md:top-[50%]', right: 'right-0', mdRight: 'md:right-[20%]' },
-        { label: 'Providers', gif: '/assets/gifs/providers.gif', top: 'top-[45%]', mdTop: 'md:top-[35%]', right: 'right-0', mdRight: 'md:right-[25%]' },
-        { label: 'System', gif: '/assets/gifs/system.gif', top: 'top-[70%]', mdTop: 'md:top-[20%]', right: 'right-0', mdRight: 'md:right-[30%]' },
+        { label: 'Memory', gif: '/assets/gifs/memory.svg', top: 'top-[20%]', mdTop: 'md:top-[50%]', right: 'right-0', mdRight: 'md:right-[20%]' },
+        { label: 'Providers', gif: '/assets/gifs/providers.svg', top: 'top-[45%]', mdTop: 'md:top-[35%]', right: 'right-0', mdRight: 'md:right-[25%]' },
+        { label: 'System', gif: '/assets/gifs/system.svg', top: 'top-[70%]', mdTop: 'md:top-[20%]', right: 'right-0', mdRight: 'md:right-[30%]' },
     ];
 
     useEffect(() => {
@@ -97,7 +97,13 @@ const NewAiAnimate = () => {
         >
             {!isRight && <span className="text-sm font-medium pr-2">{label}</span>}
             <span className="w-[42px] h-[42px] flex items-center justify-center bg-[#2388FF] rounded-full flex-shrink-0">
-                <img src={gif} alt={label} width={28} height={28} className='w-7 h-7' />
+                <Image
+                    src={getAssetUrl(gif)}
+                    alt={label}
+                    width={28}
+                    height={28}
+                    className="w-7 h-7 float-bounce-min hover:scale-110 hover:rotate-12 transition-all duration-300 ease-out"
+                />
             </span>
             {isRight && <span className="text-sm font-medium pl-2">{label}</span>}
         </div>
@@ -108,7 +114,7 @@ const NewAiAnimate = () => {
             ref={sectionRef}
             className="relative mx-auto text-white pt-32 px-4 select-none bg-cover overflow-hidden max-h-screen xl:block hidden"
 
-            
+
         >
             <Image src={getAssetUrl("/bg-inte.png")} alt="Tokyo Intelligence GIF" fill className='w-full object-cover absolute bottom-0 left-0 z-20' />
             <h2 className="text-center text-white mb-28">

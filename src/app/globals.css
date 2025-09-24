@@ -202,3 +202,41 @@ header {
   -webkit-backface-visibility: hidden;
   will-change: transform;
 }
+
+@keyframes float-bounce {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(3px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-2px) rotate(1deg);
+  }
+}
+
+.float-bounce {
+  animation: float-bounce 4s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes float-bounce-min {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(2px) rotate(-1deg);
+  }
+  75% {
+    transform: translateY(-2px) rotate(1deg);
+  }
+}
+.float-bounce-min {
+  animation: float-bounce-min 4s ease-in-out infinite;
+  will-change: transform;
+}

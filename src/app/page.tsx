@@ -15,12 +15,12 @@ import HeroNew from "./components/HerNew";
 import Language from "./components/language";
 
 const pills = [
-  { label: 'Models', gif: '/assets/gifs/models.gif' },
-  { label: 'Scene', gif: '/assets/gifs/scene.gif' },
-  { label: 'Modules', gif: '/assets/gifs/modules.gif' },
-  { label: 'Memory', gif: '/assets/gifs/memory.gif' },
-  { label: 'Providers', gif: '/assets/gifs/providers.gif' },
-  { label: 'System', gif: '/assets/gifs/system.gif' },
+  { label: 'Models', gif: '/assets/gifs/models.svg' },
+  { label: 'Scene', gif: '/assets/gifs/scene.svg' },
+  { label: 'Modules', gif: '/assets/gifs/modules.svg' },
+  { label: 'Memory', gif: '/assets/gifs/memory.svg' },
+  { label: 'Providers', gif: '/assets/gifs/providers.svg' },
+  { label: 'System', gif: '/assets/gifs/system.svg' },
 ];
 
 const bottomTabs = [
