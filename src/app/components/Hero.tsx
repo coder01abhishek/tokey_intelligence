@@ -10,7 +10,7 @@ import ChangingWordHero from "./ChangingWordHero";
 
 const Hero: React.FC = () => {
     return (
-        <section className="relative flex flex-col items-center justify-center bg-[#111111] text-center sm:px-4 sm:py-20 py-8  min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]" id="home">
+        <section className="relative flex flex-col items-center justify-center bg-[#111111] text-center sm:px-4 sm:pt-20 pt-8  min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]" id="home">
             {/* Sparkles Background */}
             <div className="w-full absolute inset-0 bg-[#111111] h-full">
                 <SparklesCore
@@ -32,7 +32,7 @@ const Hero: React.FC = () => {
                     loop
                     muted
                     playsInline
-                    className="z-10 w-full object-contain"
+                    className="z-10 w-full sm:h-full h-90 object-contain"
                 />
 
 
@@ -82,7 +82,7 @@ const Hero: React.FC = () => {
                 >
                     Launch App
                 </Link>
-                <Link
+                {/* <Link
                     href="#"
                     className="relative sm:px-9 z-20 sm:py-3 text-[#0071E3] text-lg
                    rounded-full border border-blue-500 
@@ -92,7 +92,7 @@ const Hero: React.FC = () => {
                    backdrop-blur-sm text-sm px-6 py-3 hover:bg-[#0071E3]"
                 >
                     Visit Livestream
-                </Link>
+                </Link> */}
             </div>
         </section>
     );
