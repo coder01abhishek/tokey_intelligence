@@ -22,13 +22,13 @@ const LoaderWrapper = () => {
     const progressInterval = setInterval(() => {
       if (isMounted) {
         setProgress(prev => {
-          const newProgress = prev + 2; // Increase by 2% every 40ms to reach 100% in 2000ms
+          const newProgress = prev + 2; // Increase by 2% every 40ms
           return newProgress >= 100 ? 100 : newProgress;
         });
       }
     }, 40);
 
-    // Preload critical resources in background
+    // Preload critical resources
     const preloadResources = async () => {
       // Preload images
       const images = [
@@ -38,19 +38,28 @@ const LoaderWrapper = () => {
         '/fader.png'
       ];
 
-      await Promise.all(
-        images.map(src => {
-          return new Promise((resolve) => {
-            const img = new Image();
-            img.src = src;
-            img.onload = resolve;
-            img.onerror = resolve;
-          });
-        })
-      );
+      const imagePromises = images.map(src => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      });
+
+      // ✅ Preload video
+      const videoPromise = new Promise<void>((resolve) => {
+        const video = document.createElement('video');
+        video.src = '/videos/doll.mp4'; // <-- change to your video path
+        video.preload = 'auto';
+        video.oncanplaythrough = () => resolve();
+        video.onerror = () => resolve();
+      });
 
       // Preload fonts
-      await document.fonts.ready;
+      const fontsPromise = document.fonts.ready;
+
+      await Promise.all([...imagePromises, videoPromise, fontsPromise]);
     };
 
     preloadResources();
