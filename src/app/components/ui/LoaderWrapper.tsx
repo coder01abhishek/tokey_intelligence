@@ -197,6 +197,55 @@ const LoaderWrapper = () => {
       }
     }, 2000);
 
+<<<<<<< HEAD
+=======
+    // Smooth progress animation from 0% to 100% over 2 seconds
+    const progressInterval = setInterval(() => {
+      if (isMounted) {
+        setProgress(prev => {
+          const newProgress = prev + 2; // Increase by 2% every 40ms
+          return newProgress >= 100 ? 100 : newProgress;
+        });
+      }
+    }, 40);
+
+    // Preload critical resources
+    const preloadResources = async () => {
+      // Preload images
+      const images = [
+        '/videos/doll.gif',
+        '/bg-inte.png',
+        '/Gradient.png',
+        '/fader.png'
+      ];
+
+      const imagePromises = images.map(src => {
+        return new Promise<void>((resolve) => {
+          const img = new Image();
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      });
+
+      // ✅ Preload video
+      const videoPromise = new Promise<void>((resolve) => {
+        const video = document.createElement('video');
+        video.src = '/videos/doll.mp4'; // <-- change to your video path
+        video.preload = 'auto';
+        video.oncanplaythrough = () => resolve();
+        video.onerror = () => resolve();
+      });
+
+      // Preload fonts
+      const fontsPromise = document.fonts.ready;
+
+      await Promise.all([...imagePromises, videoPromise, fontsPromise]);
+    };
+
+    preloadResources();
+
+>>>>>>> abf1abc7e33d2afbffbcf8c9b41f58dfda44f5e0
     return () => {
       isMounted = false;
       if (minimumTimer) clearTimeout(minimumTimer);
