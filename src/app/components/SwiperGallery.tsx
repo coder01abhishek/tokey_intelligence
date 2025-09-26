@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import Swiper from 'swiper/bundle';
 import 'swiper/css/bundle';
 import 'swiper/css/autoplay';
@@ -11,16 +11,16 @@ import Image from 'next/image';
 import { getAssetUrl } from '../config/assets';
 
 export default function SwiperGallery() {
-  useEffect(() => {
+  const initializeSwiper = useCallback(() => {
     const swiper = new Swiper('.swiper-container', {
       modules: [Autoplay, EffectCoverflow],
       simulateTouch: true,
       watchSlidesProgress: true,
       loop: true,
-      speed: 3000,
+      speed: 1500,
       centeredSlides: true,
       autoplay: {
-        delay: 1000,
+        delay: 2000,
         disableOnInteraction: false,
       },
       effect: 'coverflow',
@@ -30,6 +30,10 @@ export default function SwiperGallery() {
         depth: 200,
         modifier: 1,
         slideShadows: false,
+      },
+      lazy: {
+        loadPrevNext: true,
+        loadPrevNextAmount: 2,
       },
       breakpoints: {
         0: {
@@ -46,6 +50,12 @@ export default function SwiperGallery() {
         },
       },
     });
+  }, []);
+
+  useEffect(() => {
+    // Delay swiper initialization to improve initial load
+    const timer = setTimeout(initializeSwiper, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const slidesData = [
@@ -79,13 +89,6 @@ export default function SwiperGallery() {
           className="sm:w-full w-[280px] mx-auto h-auto object-cover  sm:px-0"
         />
     
-        {/* <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(180deg, rgba(17, 17, 17, 0) 35.17%, #111111 95.42%)',
-          }}
-        /> */}
       </div>
       <div className="text-content w-full text-center p-4 z-40 relative z-20">
         <p className="font-medium text-white text-3xl relative z-50">{slide.title}</p>
@@ -110,8 +113,10 @@ export default function SwiperGallery() {
             alt="Swiper frame decoration"
             width={800}
             height={600}
-            className="w-full h-full"
             priority
+            preload="metadata"
+            loading="lazy"
+            className="w-full h-full"
           />
         </span>
       </div>

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Hero from "./components/Hero";
 import SwiperGallery from "./components/SwiperGallery";
 import AtTokyo from "./components/AtTokyo";
@@ -7,7 +8,6 @@ import ModulesSection from "./components/ModulesSection";
 import UnderDevelopmentSlider from "./components/UnderDevelopmentSection";
 import AICharacterSection from "./components/AICharacterSection";
 import FaqSection from "./components/FaqSection";
-// import TokyoIntelligenceSection from "./components/TokyoIntelligenceSection";
 import NewAiAnimate from "./components/NewAiAnimate";
 import MobilePillTabs from "./components/MobilePillTabs";
 import Section from "./components/ui/Section";
@@ -33,51 +33,74 @@ export default function Home() {
   return (
     <div>
       <main>
+        {/* Critical above-the-fold content */}
+        <Hero />
 
-        <Section>
-          <Hero />
-        </Section>
+        {/* Lazy load non-critical sections */}
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <Section>
+            <SwiperGallery />
+          </Section>
+        </Suspense>
 
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <Section>
+            <AtTokyo />
+          </Section>
+        </Suspense>
 
-        <Section>
-          <SwiperGallery />
-        </Section>
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <NewAiAnimate />
+        </Suspense>
 
-        <Section>
-          <AtTokyo />
-        </Section>
+        <Suspense fallback={<div className="h-96 bg-[#111111]" />}>
+          <MobilePillTabs pills={pills} bottomTabs={bottomTabs} />
+        </Suspense>
 
-        <NewAiAnimate />
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <Section>
+            <HeroNew />
+          </Section>
+        </Suspense>
 
-        <MobilePillTabs pills={pills} bottomTabs={bottomTabs} />
-        <Section>
-          <HeroNew />
-        </Section>
-        <Section>
-          <HowItWorks />
-        </Section>
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <Section>
+            <HowItWorks />
+          </Section>
+        </Suspense>
 
-        <Section>
-          <Webelieve />
-        </Section>
+        <Suspense fallback={<div className="h-screen bg-[#111111]" />}>
+          <Section>
+            <Webelieve />
+          </Section>
+        </Suspense>
 
-        <Section>
-          <section className="bg-black sm:py-20 py-16" id="modules">
-            <ModulesSection />
-            <UnderDevelopmentSlider />
-          </section>
-        </Section>
+        <Suspense fallback={<div className="h-screen bg-black" />}>
+          <Section>
+            <section className="bg-black sm:py-20 py-16" id="modules">
+              <ModulesSection />
+              <UnderDevelopmentSlider />
+            </section>
+          </Section>
+        </Suspense>
 
-        <Section>
-          <AICharacterSection />
-        </Section>
+        <Suspense fallback={<div className="h-96 bg-[#111111]" />}>
+          <Section>
+            <AICharacterSection />
+          </Section>
+        </Suspense>
 
-        <Section>
-          <Language />
-        </Section>
-        <Section>
-          <FaqSection />
-        </Section>
+        <Suspense fallback={<div className="h-screen bg-black" />}>
+          <Section>
+            <Language />
+          </Section>
+        </Suspense>
+
+        <Suspense fallback={<div className="h-96 bg-[#111111]" />}>
+          <Section>
+            <FaqSection />
+          </Section>
+        </Suspense>
 
       </main>
     </div>

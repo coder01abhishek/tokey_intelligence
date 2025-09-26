@@ -1,37 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { SparklesCore } from "../components/Backgrounds/sparkles";
 import Link from "next/link";
 import { getAssetUrl } from '../config/assets';
-// import { LayoutTextFlip } from "./ui/LayoutTextFlip";
-// import { motion } from "motion/react";
 import ChangingWordHero from "./ChangingWordHero";
 
 const Hero: React.FC = () => {
     return (
         <section className="relative flex flex-col items-center justify-center bg-[#111111] text-center sm:px-4 sm:py-20 py-8  min-h-[calc(100vh-64px)] max-h-[calc(100vh-64px)]" id="home">
             {/* Sparkles Background */}
-            <div className="w-full absolute inset-0 bg-[#111111] h-full">
-                <SparklesCore
-                    id="tsparticlesfullpage"
-                    background="transparent"
-                    minSize={0.6}
-                    maxSize={1.4}
-                    particleDensity={100}
-                    className="w-full h-full"
-                    particleColor="#FFFFFF"
-                />
-            </div>
+            <Suspense fallback={<div className="w-full absolute inset-0 bg-[#111111] h-full" />}>
+                <div className="w-full absolute inset-0 bg-[#111111] h-full">
+                    <SparklesCore
+                        id="tsparticlesfullpage"
+                        background="transparent"
+                        minSize={0.6}
+                        maxSize={1.4}
+                        particleDensity={50}
+                        className="w-full h-full"
+                        particleColor="#FFFFFF"
+                    />
+                </div>
+            </Suspense>
 
             {/* Character GIF with transparent background for aesthetics */}
             <div className="relative w-full sm:max-w-md max-w-sm">
                 <video
-                    src={getAssetUrl("/videos/doll.mp4")} // use the proper video file path
+                    src={getAssetUrl("/videos/doll.mp4")}
                     autoPlay
                     loop
                     muted
                     playsInline
+                    preload="auto"
+                    loading="eager"
                     className="z-10 w-full sm:h-full h-90 object-contain"
                 />
 
@@ -53,19 +55,9 @@ const Hero: React.FC = () => {
                             "linear-gradient(180deg, rgba(17, 17, 17, 0) 35.17%, #111111 90.42%)",
                     }}
                 />
-                {/* <img src="/Gradient.png" alt="Gradient" className="absolute bottom-0 left-0 w-full"/> */}
             </div>
 
             {/* Headline */}
-            {/* <h1 className="sm:mt-8 mt-4 text-white">AI Streamer Launchpad</h1> */}
-            {/* <motion.div className="relative  flex flex-col items-center justify-center gap-4 text-center sm:flex-row">
-                <h1 className="sm:mt-8 mt-2 text-white relative z-40">AI&nbsp; 
-                    <LayoutTextFlip
-                        text=""
-                        words={["Streamer", "Friend", "Buddy", "Gamer", "Creator","Companion","Baddie","Helper","Assistant"]}
-                    />
-                      &nbsp;Launchpad</h1>
-            </motion.div> */}
             <ChangingWordHero />
 
             {/* Subtext */}
@@ -82,17 +74,6 @@ const Hero: React.FC = () => {
                 >
                     Launch App
                 </Link>
-                {/* <Link
-                    href="#"
-                    className="relative sm:px-9 z-20 sm:py-3 text-[#0071E3] text-lg
-                   rounded-full border border-blue-500 
-                   hover:text-white
-                   transition-all duration-300 ease-in-out
-                   shadow-[0_0_15px_rgba(0,0,255,0.5)] 
-                   backdrop-blur-sm text-sm px-6 py-3 hover:bg-[#0071E3]"
-                >
-                    Visit Livestream
-                </Link> */}
             </div>
         </section>
     );

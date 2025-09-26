@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Loader from './Loader';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAssetUrl } from '../../config/assets';
@@ -12,113 +12,40 @@ const LoaderWrapper = () => {
   useEffect(() => {
     let isMounted = true;
     let loadedCount = 0;
-    let minimumTimer: NodeJS.Timeout | null = null;
     let allLoaded = false;
 
-    // All assets to preload (images, videos, GIFs from BLOB_URLS + public folders, excluding known 404 assets)
+    // Only preload critical assets for faster initial load
     const criticalAssets = [
-      // All videos from BLOB_URLS and public/videos
+      // Only critical videos for hero section
       '/videos/doll.mp4',
       '/videos/doll2.mp4',
       '/videos/doll3.mp4',
-      '/videos/AICharactor.mp4',
-      '/videos/step3.mp4',
-      '/videos/Aiagent.mp4',
-      '/videos/doll.gif',
-      '/videos/tokyointelligence.mp4',
-      '/videos/AICharactor_old.mp4',
-      '/videos/AICharactor_olds.mp4',
-      '/videos/step3_old.mp4',
       
-      // All GIFs from BLOB_URLS and public/assets/gifs
-      '/assets/gifs/loader.gif',
-      '/assets/gifs/consciousness.gif',
-      '/assets/gifs/discord.gif',
-      '/assets/gifs/hearing.gif',
-      '/assets/gifs/memory.gif',
-      '/assets/gifs/models.gif',
-      '/assets/gifs/modules.gif',
-      '/assets/gifs/providers.gif',
-      '/assets/gifs/scene.gif',
-      '/assets/gifs/shortTerm.gif',
-      '/assets/gifs/speech.gif',
-      '/assets/gifs/system.gif',
-      '/assets/gifs/vision.gif',
-      '/assets/gifs/x.gif',
-      '/assets/gifs/consciousness.svg',
-      '/assets/gifs/discord.svg',
-      '/assets/gifs/hearing.svg',
-      '/assets/gifs/memory.svg',
-      '/assets/gifs/models.svg',
-      '/assets/gifs/modules.svg',
-      '/assets/gifs/providers.svg',
-      '/assets/gifs/scene.svg',
-      '/assets/gifs/shortTerm.svg',
-      '/assets/gifs/speech.svg',
-      '/assets/gifs/system.svg',
-      '/assets/gifs/vision.svg',
-      '/assets/gifs/x.svg',
-      '/assets/gifs/e7e1b0d51357ff97737fb35438de69399854492f.gif',
-      
-      // All images from BLOB_URLS and public/assets/images (excluding /fader.png to avoid 404)
-      '/bg-inte.png',
-      '/cursor.png',
-      '/Gradient.png',
-      '/hand.png',
-      '/phone.png',
+      // Critical images only
       '/iPhone14Pro.svg',
-      '/file.svg',
-      '/globe.svg',
-      '/next.svg',
-      '/vercel.svg',
-      '/window.svg',
-      '/assets/images/ainew.png',
-      '/assets/images/ainew_1.png',
-      '/assets/images/ainew_2.png',
-      '/assets/images/ainew_old.png',
-      '/assets/images/eng.png',
-      '/assets/images/epanola.png',
-      '/assets/images/pycc.png',
-      '/assets/images/tech-mask.png',
-      '/assets/images/tie.png',
-      '/assets/images/简体中文提示.png',
+      '/cursor.png',
       
-      // Icons/Favicons from BLOB_URLS
-      '/favicon.ico',
-      '/favicon-16x16.png',
-      '/favicon-32x32.png',
-      '/apple-touch-icon.png',
-      '/android-chrome-192x192.png',
-      '/android-chrome-512x512.png',
-      
-      // Additional GIF icons from BLOB_URLS
-      '/assets/gifs/brain.gif',
-      '/assets/gifs/layers.gif',
-      '/assets/gifs/avatar.gif',
-      '/assets/gifs/talking.gif',
-      '/assets/gifs/discord-icon.gif',
-      '/assets/gifs/intuitive.gif',
-      '/assets/gifs/x-logo.gif',
-      '/assets/gifs/film.gif',
-      '/assets/gifs/binoculars.gif',
-      '/assets/gifs/circuits.gif',
-      '/assets/gifs/settings.gif',
-      '/assets/gifs/special-animation.gif',
+      // Essential GIFs for modules
+      '/assets/gifs/consciousness.gif',
+      '/assets/gifs/memory.gif',
+      '/assets/gifs/modules.gif',
+      '/assets/gifs/speech.gif',
     ];
 
     const totalAssets = criticalAssets.length + 1; // +1 for fonts
 
-    const updateProgress = () => {
+    const updateProgress = useCallback(() => {
       if (isMounted) {
         const newProgress = Math.round((loadedCount / totalAssets) * 100);
         setProgress(newProgress);
       }
-    };
+    }, [loadedCount, totalAssets]);
 
-    const preloadImage = (src: string): Promise<void> => {
+    const preloadImage = useCallback((src: string): Promise<void> => {
       return new Promise((resolve) => {
         const img = new Image();
         img.src = getAssetUrl(src);
+        img.loading = 'eager';
         img.onload = () => {
           loadedCount++;
           updateProgress();
@@ -130,9 +57,9 @@ const LoaderWrapper = () => {
           resolve();
         };
       });
-    };
+    }, [updateProgress]);
 
-    const preloadVideo = (src: string): Promise<void> => {
+    const preloadVideo = useCallback((src: string): Promise<void> => {
       return new Promise((resolve) => {
         const video = document.createElement('video');
         video.preload = 'auto';
@@ -148,7 +75,7 @@ const LoaderWrapper = () => {
           resolve();
         };
       });
-    };
+    }, [updateProgress]);
 
     const preloadResources = async () => {
       // Preload images
@@ -172,34 +99,19 @@ const LoaderWrapper = () => {
 
       allLoaded = true;
 
-      // Set minimum timer if not already set
-      if (!minimumTimer) {
-        minimumTimer = setTimeout(() => {
-          if (isMounted) {
-            setLoading(false);
-          }
-        }, 2000);
-      } else {
-        // If minimum timer already passed, hide loader immediately
+      // Shorter minimum loading time for better UX
+      setTimeout(() => {
         if (isMounted) {
           setLoading(false);
         }
-      }
+      }, 800);
     };
 
     // Start preloading
     preloadResources();
 
-    // Set minimum timer
-    minimumTimer = setTimeout(() => {
-      if (isMounted && allLoaded) {
-        setLoading(false);
-      }
-    }, 2000);
-
     return () => {
       isMounted = false;
-      if (minimumTimer) clearTimeout(minimumTimer);
     };
   }, []);
 
@@ -212,7 +124,7 @@ const LoaderWrapper = () => {
   const pageTransition = {
     type: "tween" as const,
     ease: "easeInOut" as const,
-    duration: 0.5
+    duration: 0.3
   };
 
   return (
