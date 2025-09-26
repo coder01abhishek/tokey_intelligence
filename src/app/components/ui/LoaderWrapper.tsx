@@ -197,8 +197,7 @@ const LoaderWrapper = () => {
       }
     }, 2000);
 
-<<<<<<< HEAD
-=======
+
     // Smooth progress animation from 0% to 100% over 2 seconds
     const progressInterval = setInterval(() => {
       if (isMounted) {
@@ -245,7 +244,7 @@ const LoaderWrapper = () => {
 
     preloadResources();
 
->>>>>>> abf1abc7e33d2afbffbcf8c9b41f58dfda44f5e0
+
     return () => {
       isMounted = false;
       if (minimumTimer) clearTimeout(minimumTimer);
